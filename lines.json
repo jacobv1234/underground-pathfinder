@@ -16,41 +16,26 @@
         "Bank","Waterloo"
     ],
 
-    "District1": [
+    "District": [
         "Ealing Broadway","Ealing Common","Acton Town",
-        "Chiswick Park","Turnham Green","Stamford Brook",
-        "Ravenscourt Park","Hammersmith","Earl's Court",
-        "Gloucester Road","South Kensington","Sloane Square",
-        "Victoria","St. James's Park","Westminster",
-        "Embankment","Temple","Blackfriars",
-        "Mansion House","Cannon Street","Monument",
-        "Tower Hill","Aldgate East","Whitechapel",
-        "Stepney Green","Mile End","Bow Road",
-        "Bromley-by-Bow","West Ham","Plaistow",
-        "Upton Park","East Ham","Barking",
-        "Upney","Becontree","Dagenham Heathway",
-        "Dagenham East","Elm Park","Hornchurch",
-        "Upminster Bridge","Upminster"
-    ],
+        "Chiswick Park",
 
-    "District2": [
-        "Ealing Broadway","Ealing Common","Acton Town",
-        "Chiswick Park","Turnham Green","Stamford Brook",
-        "Ravenscourt Park","Hammersmith","Earl's Court",
-        "High Street Kensington","Notting Hill Gate", "Bayswater",
-        "Paddington","Edgware Road"
-    ],
-
-    "District3": [
-        "Kensington (Olympia)", "Earl's Court",
-        "High Street Kensington","Notting Hill Gate", "Bayswater",
-        "Paddington","Edgware Road"
-    ],
-
-    "District4": [
-        "Richmond", "Kew Gardens","Gunnersbury",
+        "|>Richmond","Kew Gardens","||Gunnersbury",
+        
         "Turnham Green","Stamford Brook",
-        "Ravenscourt Park","Hammersmith","Earl's Court",
+        "Ravenscourt Park","Hammersmith",
+        
+        "||>Kensington (Olympia)",
+
+        "|>Wimbledon","Wimbledon Park", "Southfields",
+        "East Putney","Butney Bridge","Parsons Green",
+        "West Brompton",
+
+        "Earl's Court",
+
+        "<|High Street Kensington","Notting Hill Gate",
+        "Bayswater","Paddington","||Edgware Road",
+
         "Gloucester Road","South Kensington","Sloane Square",
         "Victoria","St. James's Park","Westminster",
         "Embankment","Temple","Blackfriars",
@@ -62,39 +47,6 @@
         "Upney","Becontree","Dagenham Heathway",
         "Dagenham East","Elm Park","Hornchurch",
         "Upminster Bridge","Upminster"
-    ],
-
-    "District5": [
-        "Richmond", "Kew Gardens","Gunnersbury",
-        "Turnham Green","Stamford Brook",
-        "Ravenscourt Park","Hammersmith","Earl's Court",
-        "High Street Kensington","Notting Hill Gate", "Bayswater",
-        "Paddington","Edgware Road"
-    ],
-
-    "District6": [
-        "Wimbledon","Wimbledon Park","Southfields",
-        "East Putney","Putney Bridge", "Parsons Green",
-        "Fulham Broadway","West Brompton","Earl's Court",
-        "Gloucester Road","South Kensington","Sloane Square",
-        "Victoria","St. James's Park","Westminster",
-        "Embankment","Temple","Blackfriars",
-        "Mansion House","Cannon Street","Monument",
-        "Tower Hill","Aldgate East","Whitechapel",
-        "Stepney Green","Mile End","Bow Road",
-        "Bromley-by-Bow","West Ham","Plaistow",
-        "Upton Park","East Ham","Barking",
-        "Upney","Becontree","Dagenham Heathway",
-        "Dagenham East","Elm Park","Hornchurch",
-        "Upminster Bridge","Upminster"
-    ],
-
-    "District7": [
-        "Wimbledon","Wimbledon Park","Southfields",
-        "East Putney","Putney Bridge", "Parsons Green",
-        "Fulham Broadway","West Brompton","Earl's Court",
-        "High Street Kensington","Notting Hill Gate", "Bayswater",
-        "Paddington","Edgware Road"
     ],
 
     "Circle": [
@@ -110,6 +62,32 @@
         "St. James's Park","Victoria","Sloane Square",
         "South Kensington","Gloucester Road","High Street Kensington",
         "Notting Hill Gate", "Bayswater","Paddington","Edgware Road"
-    ]
+    ],
 
+    "Metropolitan": [
+        "Aldgate","Liverpool Street","Moorgate",
+        "Barbican","Farringdon","King's Cross",
+        "Euston Square","Great Portland Street",
+        "Baker Street","Finchley Road","Wembley Park",
+        "Preston Road", "Northwick Park", "Harrow-on-the-Hill",
+
+        "|<West Harrow", "Rayners Lane", "Eastcote",
+        "Ruislip Manor", "Ruislip", "Ickenham",
+        "Hillingdon", "||Uxbridge",
+
+        "North Harrow", "Pinner", "Northwood Hills",
+        "Northwood", "Moor Park",
+
+        "|<Croxley","||Watford",
+
+        "Rickmansworth","Chorleywood","Chalfont & Latimer",
+
+        "||<Chesham",
+
+        "Amersham"
+    ],
+
+    "Walkway0": [
+        "Bank", "Monument"
+    ]
 }
