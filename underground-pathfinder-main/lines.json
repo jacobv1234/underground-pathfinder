@@ -1,0 +1,93 @@
+{
+    "Hammersmith & City" : [
+        "Hammersmith","Goldhawk Road","Shepherd's Bush Market",
+        "Wood Lane","Latimer Road","Ladbroke Grove",
+        "Westbourne Park","Royal Oak","Paddington",
+        "Edgware Road","Baker Street","Great Portland Street",
+        "Euston Square","King's Cross","Farringdon",
+        "Barbican","Moorgate","Liverpool Street",
+        "Aldgate East","Whitechapel","Stepney Green",
+        "Mile End","Bow Road","Bromley-by-Bow",
+        "West Ham","Plaistow","Upton Park",
+        "East Ham","Barking"
+    ],
+
+    "Waterloo & City": [
+        "Bank","Waterloo"
+    ],
+
+    "District": [
+        "Ealing Broadway","Ealing Common","Acton Town",
+        "Chiswick Park",
+
+        "|>Richmond","Kew Gardens","||Gunnersbury",
+        
+        "Turnham Green","Stamford Brook",
+        "Ravenscourt Park","Hammersmith",
+        
+        "||>Kensington (Olympia)",
+
+        "|>Wimbledon","Wimbledon Park", "Southfields",
+        "East Putney","Butney Bridge","Parsons Green",
+        "West Brompton",
+
+        "Earl's Court",
+
+        "<|High Street Kensington","Notting Hill Gate",
+        "Bayswater","Paddington","||Edgware Road",
+
+        "Gloucester Road","South Kensington","Sloane Square",
+        "Victoria","St. James's Park","Westminster",
+        "Embankment","Temple","Blackfriars",
+        "Mansion House","Cannon Street","Monument",
+        "Tower Hill","Aldgate East","Whitechapel",
+        "Stepney Green","Mile End","Bow Road",
+        "Bromley-by-Bow","West Ham","Plaistow",
+        "Upton Park","East Ham","Barking",
+        "Upney","Becontree","Dagenham Heathway",
+        "Dagenham East","Elm Park","Hornchurch",
+        "Upminster Bridge","Upminster"
+    ],
+
+    "Circle": [
+        "Hammersmith","Goldhawk Road","Shepherd's Bush Market",
+        "Wood Lane","Latimer Road","Ladbroke Grove",
+        "Westbourne Park","Royal Oak","Paddington",
+        "Edgware Road","Baker Street","Great Portland Street",
+        "Euston Square","King's Cross","Farringdon",
+        "Barbican","Moorgate","Liverpool Street",
+        "Aldgate", "Tower Hill", "Monument",
+        "Cannon Street", "Mansion House", "Blackfriars",
+        "Temple","Embankment","Westminster",
+        "St. James's Park","Victoria","Sloane Square",
+        "South Kensington","Gloucester Road","High Street Kensington",
+        "Notting Hill Gate", "Bayswater","Paddington","Edgware Road"
+    ],
+
+    "Metropolitan": [
+        "Aldgate","Liverpool Street","Moorgate",
+        "Barbican","Farringdon","King's Cross",
+        "Euston Square","Great Portland Street",
+        "Baker Street","Finchley Road","Wembley Park",
+        "Preston Road", "Northwick Park", "Harrow-on-the-Hill",
+
+        "|<West Harrow", "Rayners Lane", "Eastcote",
+        "Ruislip Manor", "Ruislip", "Ickenham",
+        "Hillingdon", "||Uxbridge",
+
+        "North Harrow", "Pinner", "Northwood Hills",
+        "Northwood", "Moor Park",
+
+        "|<Croxley","||Watford",
+
+        "Rickmansworth","Chorleywood","Chalfont & Latimer",
+
+        "||<Chesham",
+
+        "Amersham"
+    ],
+
+    "Walkway0": [
+        "Bank", "Monument"
+    ]
+}
