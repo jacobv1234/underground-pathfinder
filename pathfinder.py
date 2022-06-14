@@ -68,36 +68,104 @@ print(linematches)
 # find what stations can be reached in a single train
 one_train = {}
 for i in range(len(startlines)):
-    stationnumber = startindexes[i]
+    startindex = startindexes[i]
     line = lines[startlines[i]]
     reachableonline = []
+    stationnumber = startindex
 
     # check forwards - if || is found before |< or |> it is in a branch
     onbranch = False
     for j in range(stationnumber,len(line)):
-        if '||' in line[j]:
-            onbranch = True
-            break
         if '|<' in line[j] or '|>' in line[j]:
+            break
+        elif '||' in line[j]:
+            onbranch = True
             break
 
     # try forwards through the list
-    skip = False
-    while stationnumber < len(line):
-        station = line[stationnumber]
-        stationnumber += 1
+    runmainloop = True
 
-        if '|>' in station:
-            skip = True
+    if onbranch:
+        while True:
+            reachableonline.append(line[stationnumber].strip('|').strip('<').strip('>'))
+            if '||' in line[stationnumber]:
+                break
+            stationnumber += 1
         
-        #if '||' in station:
-            
-            
+        temp = startindex
+        while True:
+            if '|>' in line[temp]:
+                break
+            if '|<' in line[temp]:
+                runmainloop = False
+                break
+            temp -= 1
+    
+    if runmainloop:
+        while True:
+            skip = False
+            station = line[stationnumber]
+            if '|>' in station:
+                skip = True
+                while True:
+                    if '||' in station:
+                        break
+                    stationnumber += 1
+                    station = line[stationnumber]
 
-        if station[-2:] == '<<' or skip:
-            if '||' in station and skip:
-                skip = False
-            continue
-            
-        station = station.strip('|').strip('<').strip('>').lower()
-        reachableonline.append(station)
+            station = station.strip('|').strip('<').strip('>')
+            if not skip:
+                reachableonline.append(station)
+            stationnumber += 1
+            if stationnumber >= len(line):
+                break
+    
+    # backwards
+    stationnumber = startindex
+    runmainloop = True
+    if onbranch:
+        while True:
+            reachableonline.append(line[stationnumber].strip('|').strip('<').strip('>'))
+            if '|>' in line[stationnumber]:
+                runmainloop = False
+                break
+            if '|<' in line[stationnumber]:
+                break
+            stationnumber -= 1
+    
+    if runmainloop:
+        while True:
+            station = line[stationnumber]
+            if '||' in station:
+                temp = stationnumber
+                while True:
+                    if '|>' in line[stationnumber]:
+                        stationnumber = temp
+                        while True:
+                            if '|>' in line[stationnumber]:
+                                stationnumber -= 1
+                                break
+                            reachableonline.append(line[stationnumber].strip('|').strip('<').strip('>'))
+                            stationnumber -= 1
+                        break
+                    if '|<' in line[stationnumber]:
+                        stationnumber = temp
+                        while True:
+                            if '|<' in line[stationnumber]:
+                                stationnumber -= 1
+                                break
+                            stationnumber -= 1
+                        break
+                    stationnumber -= 1
+                    station = line[stationnumber]
+
+            station = station.strip('|').strip('<').strip('>')
+            reachableonline.append(station)
+            stationnumber -= 1
+            if stationnumber < 0:
+                break
+    
+    print(reachableonline)
+    one_train[startlines[i]] = reachableonline
+
+print(one_train)

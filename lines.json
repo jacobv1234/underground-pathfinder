@@ -24,16 +24,17 @@
         
         "Turnham Green","Stamford Brook",
         "Ravenscourt Park","Hammersmith",
+        "Barons Court", "West Kensington",
         
         "||>Kensington (Olympia)",
 
         "|>Wimbledon","Wimbledon Park", "Southfields",
-        "East Putney","Butney Bridge","Parsons Green",
-        "West Brompton",
+        "East Putney","Putney Bridge","Parsons Green",
+        "||West Brompton",
 
         "Earl's Court",
 
-        "<|High Street Kensington","Notting Hill Gate",
+        "|<High Street Kensington","Notting Hill Gate",
         "Bayswater","Paddington","||Edgware Road",
 
         "Gloucester Road","South Kensington","Sloane Square",
