@@ -87,7 +87,8 @@ for i in range(len(startlines)):
 
     if onbranch:
         while True:
-            reachableonline.append(line[stationnumber].strip('|').strip('<').strip('>'))
+            if line[stationnumber].strip('|').strip('<').strip('>') not in reachableonline:
+                reachableonline.append(line[stationnumber].strip('|').strip('<').strip('>'))
             if '||' in line[stationnumber]:
                 break
             stationnumber += 1
@@ -114,7 +115,7 @@ for i in range(len(startlines)):
                     station = line[stationnumber]
 
             station = station.strip('|').strip('<').strip('>')
-            if not skip:
+            if not skip and station not in reachableonline:
                 reachableonline.append(station)
             stationnumber += 1
             if stationnumber >= len(line):
@@ -125,13 +126,14 @@ for i in range(len(startlines)):
     runmainloop = True
     if onbranch:
         while True:
-            reachableonline.append(line[stationnumber].strip('|').strip('<').strip('>'))
+            if line[stationnumber].strip('|').strip('<').strip('>') not in reachableonline:
+                reachableonline.append(line[stationnumber].strip('|').strip('<').strip('>'))
             if '|>' in line[stationnumber]:
                 runmainloop = False
                 break
+            stationnumber -= 1
             if '|<' in line[stationnumber]:
                 break
-            stationnumber -= 1
     
     if runmainloop:
         while True:
@@ -142,11 +144,12 @@ for i in range(len(startlines)):
                     if '|>' in line[stationnumber]:
                         stationnumber = temp
                         while True:
+                            if line[stationnumber].strip('|').strip('<').strip('>') not in reachableonline:
+                                reachableonline.append(line[stationnumber].strip('|').strip('<').strip('>'))
                             if '|>' in line[stationnumber]:
                                 stationnumber -= 1
                                 station = line[stationnumber]
                                 break
-                            reachableonline.append(line[stationnumber].strip('|').strip('<').strip('>'))
                             stationnumber -= 1
                         break
                     if '|<' in line[stationnumber]:
@@ -163,7 +166,8 @@ for i in range(len(startlines)):
 
             
             station = station.strip('|').strip('<').strip('>')
-            reachableonline.append(station)
+            if station not in reachableonline:
+                reachableonline.append(station)
             stationnumber -= 1
             if stationnumber < 0:
                 break

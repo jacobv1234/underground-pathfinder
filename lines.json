@@ -88,7 +88,39 @@
         "Amersham"
     ],
 
+    "Central": [
+        "West Ruislip", "Ruislip Gardens", "South Ruislip",
+        "Northolt", "Greenford", "Perivale","Hanger Lane",
+
+        "|>Ealing Broadway","||West Acton",
+
+        "North Acton", "East Acton", "White City",
+        "Shepherd's Bush", "Holland Park",
+        "Notting Hill Gate", "Queensway", "Lancaster Gate",
+        "Marble Arch", "Bond Street", "Oxford Circus",
+        "Tottenham Court Road", "Holborn","Chancery Lane",
+        "St Paul's","Bank","Liverpool Street",
+        "Bethnal Green","Mile End","Stratford", "Leyton",
+        "Leytonstone",
+        
+        "|<Wanstead", "Redbridge", "Gants Hill",
+        "Newbury Park","Barkingside","Fairlop","Hainault",
+        "Grange Hill", "Chigwell", "||Roding Valley",
+
+        "Snaresbrook","South Woodford","Woodford",
+        "Buckhurst Hill","Loughton","Debden",
+        "Theydon Bois", "Epping"
+    ],
+
     "Walkway0": [
         "Bank", "Monument"
+    ],
+
+    "Walkway1": [
+        "Wood Lane", "White City"
+    ],
+
+    "Walkway2": [
+        "Hanger Lane", "Park Royal"
     ]
 }
