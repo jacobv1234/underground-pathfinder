@@ -76,9 +76,9 @@ for i in range(len(startlines)):
     # check forwards - if || is found before |< or |> it is in a branch
     onbranch = False
     for j in range(stationnumber,len(line)):
-        if '|<' in line[j] or '|>' in line[j]:
+        if ('|<' in line[j] or '|>' in line[j]) and j != stationnumber:
             break
-        elif '||' in line[j]:
+        if '||' in line[j]:
             onbranch = True
             break
 
@@ -144,6 +144,7 @@ for i in range(len(startlines)):
                         while True:
                             if '|>' in line[stationnumber]:
                                 stationnumber -= 1
+                                station = line[stationnumber]
                                 break
                             reachableonline.append(line[stationnumber].strip('|').strip('<').strip('>'))
                             stationnumber -= 1
@@ -153,19 +154,20 @@ for i in range(len(startlines)):
                         while True:
                             if '|<' in line[stationnumber]:
                                 stationnumber -= 1
+                                station = line[stationnumber]
                                 break
                             stationnumber -= 1
                         break
                     stationnumber -= 1
                     station = line[stationnumber]
 
+            
             station = station.strip('|').strip('<').strip('>')
             reachableonline.append(station)
             stationnumber -= 1
             if stationnumber < 0:
                 break
     
-    print(reachableonline)
     one_train[startlines[i]] = reachableonline
 
 print(one_train)
