@@ -122,5 +122,25 @@
 
     "Walkway2": [
         "Hanger Lane", "Park Royal"
+    ],
+
+    "Walkway3": [
+        "Euston Square", "Euston"
+    ],
+
+    "Walkway4": [
+        "Tower Hill", "Tower Gateway"
+    ],
+
+    "Walkway5": [
+        "Bow Road", "Bow Church"
+    ],
+
+    "Walkway6": [
+        "Finchley Road", "Finchley Road & Frognal"
+    ],
+
+    "Walkway7": [
+        "Northwick Park", "Kenton"
     ]
 }

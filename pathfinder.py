@@ -27,14 +27,30 @@ end = input("Enter the destination: ")
 startlines = []
 startindexes = []
 linenames = list(lines.keys())
-for linename in linenames:
-    line = lines[linename]
-    for i in range(len(line)):
-        check = str(line[i]).strip('|').strip('<').strip('>').lower()
-        if start.lower() == check:
-            startlines.append(linename)
-            startindexes.append(i)
-    
+
+def get_lines(station):
+    for linename in linenames:
+        line = lines[linename]
+        for i in range(len(line)):
+            check = str(line[i]).strip('|').strip('<').strip('>').lower()
+            if station.lower() == check and linename not in startlines:
+                startlines.append(linename)
+                startindexes.append(i)
+
+get_lines(start)
+
+# if on a walkway add the lines of the other end
+for line in startlines:
+    if 'Walkway' in line:
+        walkwayid = line
+        if lines[walkwayid][0].lower() == start.lower():
+            connected = lines[walkwayid][1]
+        else:
+            connected = lines[walkwayid][0]
+        get_lines(connected)
+        break
+
+
 print(startlines)
 
 # same for end
