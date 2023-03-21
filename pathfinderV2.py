@@ -9,9 +9,6 @@
 # The station that connects to the mainline is the station
 # closest to the connecting station <first >last
 
-# >> means that the station can only be reached from
-# the previous (one way path) - suffix
-# << is the reverse - suffix
 
 # load lines
 import json
@@ -52,45 +49,152 @@ def find_station(station,walkway=False):
 
 # returns a dictionary of which stations can be reached on one train - requires the first two of the three lists generated above
 def onetrain(on_lines,indexes):
-    stations = {}
+    stations = []
     # iterate through every line in on_lines
     for i in range(len(on_lines)):
         on_line = on_lines[i]
         line = lines[on_line]
         index = indexes[i]
+
         # find if the station is on a branch by checking forwards to find || before |> or |<
         # whether or not it is on a branch affects future logic
         onbranch = False
         for j in range(index, len(line)):
-            if '||' in line[j]:
+            if ('|<' in line[j] or '|>' in line[j]) and j != index:
+                break
+            elif '||' in line[j]:
                 onbranch = True
                 break
-            elif ('|<' in line[j] or '|>' in line[j]) and j != index:
-                break
         
-        direction = ''
+        direction = 'none'
         if onbranch:
             # iterate backwards to find the associated |< or |>
-            for j in range(index,0,-1):
+            for j in range(index,-1,-1):
                 if '|<' in line[j]:
                     direction = '|<'
                     break
                 if '|>' in line[j]:
                     direction = '|>'
                     break
+        
+        forward = []
+        # iterate forwards to find all accessible stations
+        for j in range(index,len(line)):
+            station = line[j]
+            if '|>' not in station:
+                forward.append(station)
+            if '||' in station and direction == '|<':
+                break
 
+            # branch logic
+            if '|>' in station:
+                offbranch = False
+                while not offbranch:
+                    if '||' in line[j]:
+                        offbranch = True
+                    j += 1
+            
+        back = []
+        # iterate forwards to find all accessible stations
+        for j in range(index,-1, -1):
+            station = line[j]
+            if '||' not in station:
+                back.append(station)
+            if '|>' in station and direction == '|>':
+                break
+
+            # branch logic
+            if '||' in station:
+                branch_stations = []
+                for k in range(j,-1,-1):
+                    branch_stations.append(line[k])
+                    if '|<' in line[k]:
+                        del branch_stations
+                        break
+                    elif '|>' in line[k]:
+                        back.extend(branch_stations)
+                        del branch_stations
+                        break
+        
+        all_stations = forward[:]
+        all_stations.extend(back)
+        stations.append({
+            'line' : on_line,
+            'index' : index,
+            'onbranch' : onbranch,
+            'direction' : direction,
+            'forward' : forward,
+            'back' : back,
+            'all_stations' : all_stations
+        })
 
     return stations
 
 
+# get the amount of stations between two indices
+def stations_between(startindex, endindex, line):
+    stations = lines[line]
+    if startindex < endindex:
+        distance = -1
+        extra = 0
+        while startindex + distance + extra != endindex:
+            distance += 1
+            station = stations[startindex + distance + extra]
+            # branch logic
+            if '|>' in station:
+                # skip to where the branch ends
+                for i in range(startindex + distance + extra, len(stations)):
+                    if '||' in stations[i]:
+                        extra += i - startindex - distance
+                        break
+            elif '|<' in station:
+                # skip unless destination is found
+                for i in range(startindex + distance + extra, len(stations)):
+                    if i == endindex:
+                        distance = i - startindex - extra
+                        break
+                    if '||' in stations[i]:
+                        extra = i - startindex - distance
+                        break
+        return distance
+    elif endindex < startindex:
+        return -stations_between(endindex, startindex, line)
+    else:
+        return 0
+
+
+# check if a given station is in the list of dictionaries returned above
+# returns a list of lists in [line, num_stations] format
+# num_stations is negative if backwards
+# not as a dictionary so the same line can appear multiple times
+# destination should not have branch symbols included
+def get_to_station(onetrain, destination):
+    found = []
+
+    # iterate through every line
+    for line in onetrain:
+        all_stations = line['all_stations']
+        clean_all_stations = [station.strip('|').strip('>').strip('<') for station in all_stations]
+        if destination in clean_all_stations:
+            # first find the location(s) of destination on the whole line
+            locations = []
+            for i in range(len(lines[line['line']])):
+                if lines[line['line']][i] == destination:
+                    locations.append(i)
+            # get the associated amounts of stations between
+            between = [stations_between(line['index'], val, line['line']) for val in locations]
+            for i in range(len(between)):
+                found.append([line['line'], between[i]])
+    return found
 
 
 
 startlines, startindex, startnames = find_station(start)
+start_onetrain = onetrain(startlines,startindex)
 print(f'{startnames} is on these lines: {startlines} in these places: {startindex}')
 
 endlines, endindex, endnames = find_station(end)
+end_onetrain = onetrain(endlines,endindex)
 print(f'{endnames} is on these lines: {endlines} in these places: {endindex}')
 
-print(onetrain(startlines,startindex))
-
+print(get_to_station(start_onetrain, end))
