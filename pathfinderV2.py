@@ -9,6 +9,7 @@
 # The station that connects to the mainline is the station
 # closest to the connecting station <first >last
 
+# strip the <|> symbols when showing to the user
 
 # load lines
 import json
@@ -193,6 +194,9 @@ def is_station_on_one_train(onetrain, dest_names, clean=True):
     return any([name in stations for name in dest_names])
     
 
+# why didn't I make this before!
+def clean(station):
+    return station.strip('|').strip('>').strip('<')
 
 
 # get from one station to another (one train journey)
@@ -208,12 +212,12 @@ def get_to_station_one_train(onetrain, dest_names):
     # iterate through every line
     for line in onetrain:
         all_stations = line['all_stations']
-        clean_all_stations = [station.strip('|').strip('>').strip('<') for station in all_stations]
+        clean_all_stations = [clean(station) for station in all_stations]
         if any([val in clean_all_stations for val in dest_names]):
             # first find the location(s) of dest_names on the whole line
             locations = []
             for i in range(len(lines[line['line']])):
-                if lines[line['line']][i] in dest_names:
+                if clean(lines[line['line']][i]) in dest_names or lines[line['line']][i] in dest_names:
                     locations.append(i)
             # get the associated amounts of stations between
             between = [stations_between(line['index'], val, line['line']) for val in locations]
@@ -222,75 +226,175 @@ def get_to_station_one_train(onetrain, dest_names):
     return found
 
 
-# why didn't I make this before!
-def clean(station):
-    return station.strip('|').strip('>').strip('<')
 
 
 # returns a list of all termini of a station on a line
 def find_termini(onetrain, line):
-    termini = []
-    line_data = [val for val in onetrain if val['line']][0]
+    termini = {}
+    line_data = [val for val in onetrain if val['line'] == line][0]
     stations = lines[line]
     # backwards
     # if direction = |> just add the first station with |>
     # else add all previous stations with |> and index 0
+    back = []
     for i in range(line_data['index'], -1, -1):
         if '|>' in stations[i]:
-            termini.append(clean(stations[i]))
+            back.append(clean(stations[i]))
             if line_data['direction'] == '|>':
                 break
         if i == 0:
-            termini.append(clean(stations[i]))
+            back.append(clean(stations[i]))
+    
+    termini['back'] = back
 
     # forwards
     # if direction = |< just add the first ||
     # else if |< is found add the next ||, and the last station
+    forward = []
     lookout = False
     for i in range(line_data['index'], len(stations)):
-        if line_data['direction'] == '|<' and '|<' in stations[i]:
-            termini.append(clean(stations[i]))
+        if line_data['direction'] == '|<' and '||' in stations[i]:
+            forward.append(clean(stations[i]))
             break
 
         if '|<' in stations[i]:
             lookout = True
         if '||' in stations[i] and lookout:
-            termini.append(clean(stations[i]))
+            forward.append(clean(stations[i]))
             lookout = False
         
         if i == len(stations) - 1:
-            termini.append(clean(stations[i]))
+            forward.append(clean(stations[i]))
+    
+    termini['forward'] = forward
 
     return termini
-
+                                                                                                                                            
 
 # checks if a station is between two others on a certain line
 # this is done by:
 # getting the single-train distance each way
 # isolating the one line
-# check if one is positive and one is negative
+# check if one is positive and one is negative (either can be 0)
 def is_station_between(start_names, end_names, check_onetrain, line):
-    pass
+    check_to_start = get_to_station_one_train(check_onetrain, start_names)
+    check_to_end = get_to_station_one_train(check_onetrain, end_names)
+    start_distance = [val[1] for val in check_to_start if val[0] == line]
+    end_distance = [val[1] for val in check_to_end if val[0] == line]
+
+    between = False
+
+    # as there could still be multiple values check every combination
+    for start in start_distance:
+        for end in end_distance:
+            if (start <= 0 and end >= 0) or (start >= 0 and end <= 0):
+                between = True
+    
+    return between
 
 
 
 
 # returns specific termini for getting to a station
+# possible is from find_termini(start_onetrain, line)
+def termini_to_get_to(possible, start_names, end_onetrain, line):
+    distance = [-val[1] for val in get_to_station_one_train(end_onetrain, start_names) if val[0] == line][0]
+    if distance <= 0:
+        matches = [val for val in possible['back'] if is_station_between(start_names, [val], end_onetrain, line)]
+    else:
+        matches = [val for val in possible['forward'] if is_station_between(start_names, [val], end_onetrain, line)]
+    return matches
+
+
+# find a path that takes two trains to get there
+# output is list of [line, stations, towards, changeat, line2, stations2, towards2]
+def two_train_path(start_onetrain, end_names):
+    matches = []
+
+    # go through every station on every line ONCE EACH
+    checked_stations = []
+    for line in start_onetrain:
+        for station in line['all_stations']:
+            if clean(station) not in checked_stations:
+                checked_stations.append(clean(station))
+
+                # get information about that station
+                mid_lines, mid_index, mid_names = find_station(clean(station))
+                mid_onetrain = onetrain(mid_lines, mid_index)
+
+                # if from that station you can get to the destination
+                if get_to_station_one_train(mid_onetrain, end_names) != []:
+                    # celebrate as a match has been found
+                    # find the possible routes for each leg
+                    leg1_path = get_to_station_one_train(start_onetrain, mid_names)
+                    leg2_path = get_to_station_one_train(mid_onetrain, end_names)
+
+                    # piece together each possible combination of leg1 and leg2
+                    for leg1 in leg1_path:
+                        for leg2 in leg2_path:
+                            leg1_line = leg1[0]
+                            leg1_distance = leg1[1]
+                            #leg1_termini = 
+                            matches.append(leg1)
+
+    return matches
+
+
+
 
 
 
 # work out stuff
 startlines, startindex, startnames = find_station(start)
 start_onetrain = onetrain(startlines,startindex)
-print(f'{startnames} is on these lines: {startlines} in these places: {startindex}')
+#print(f'{startnames} is on these lines: {startlines} in these places: {startindex}')
 
 endlines, endindex, endnames = find_station(end)
 end_onetrain = onetrain(endlines,endindex)
-print(f'{endnames} is on these lines: {endlines} in these places: {endindex}')
+#print(f'{endnames} is on these lines: {endlines} in these places: {endindex}')
 
 one_train_routes = get_to_station_one_train(start_onetrain, endnames)
 
-print(one_train_routes)
+#print(one_train_routes)
+
+# if possible on a single train show the possible routes
+if one_train_routes != []:
+    # to make the table look nice
+    longest_str = 0
+    for route in one_train_routes:
+        termini = termini_to_get_to(find_termini(start_onetrain, route[0]), startnames, end_onetrain, route[0])
+        str_termini = str(termini).replace('[\'', '').replace('\']', '').replace('\', \'', ' or ')
+        if len(str_termini) > longest_str:
+            longest_str = len(str_termini)
+
+    topbar = '_' * longest_str
+    lowerbar = '‾' * (longest_str + 38)
+    space_towards_r = ((longest_str - 5) // 2) * '_'
+    space_towards_l = ((((longest_str - 5) // 2) + ((longest_str - 5) % 2))) * '_'
+
+    print(f' ______________________________________{topbar}')
+    print(f'|_________Line_________|__Stations__|{space_towards_l}Towards{space_towards_r}|')
+    for route in one_train_routes:
+        line = route[0]
+        distance = str(abs(route[1]))
+        #print(find_termini(start_onetrain, line))
+        termini = termini_to_get_to(find_termini(start_onetrain, line), startnames, end_onetrain, line)
+        str_termini = str(termini).replace('[\'', '').replace('\']', '').replace('\', \'', ' or ')
+
+        space_line_r = ((22 - len(line)) // 2) * ' '
+        space_line_l = ((((22 - len(line)) // 2) + ((20 - len(line)) % 2))) * ' '
+
+        space_dist_r = ((12 - len(distance)) // 2) * ' '
+        space_dist_l = (((12 - len(distance)) // 2) + ((12 - len(distance)) % 2)) * ' '
+
+        space_towards_r = ((longest_str + 2 - len(str_termini)) // 2) * ' '
+        space_towards_l = ((((longest_str + 2 - len(str_termini)) // 2) + ((longest_str + 2 - len(str_termini)) % 2))) * ' '
+
+        print(f'|{space_line_l}{line}{space_line_r}|{space_dist_l}{distance}{space_dist_r}|{space_towards_l}{str_termini}{space_towards_r}|')
+    print(f' {lowerbar}')
 
 
-print(find_termini(start_onetrain, input('Line for termini: ')))
+else:
+    # two train logic
+    two_trains = two_train_path(start_onetrain, endnames)
+    print(two_trains)

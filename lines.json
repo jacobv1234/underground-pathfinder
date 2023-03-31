@@ -112,6 +112,79 @@
         "Theydon Bois", "Epping"
     ],
 
+    "Bakerloo": [
+        "Harrow & Wealdstone", "Kenton", "South Kenton",
+        "North Wembley", "Wembley Central", "Stonebridge Park",
+        "Harlesden", "Willesden Junction", "Kensal Green",
+        "Queen's Park", "Kilburn Park", "Maida Vale",
+        "Warwick Avenue", "Paddington", "Edgware Road",
+        "Marylebone", "Baker Street", "Regent's Park",
+        "Oxford Circus", "Piccadilly Circus", "Charing Cross",
+        "Embankment", "Waterloo", "Lambeth North",
+        "Elephant & Castle"
+    ],
+
+    "Northern Via Bank": [
+        "Morden", "South Wimbledon", "Colliers Wood",
+        "Tooting Broadway", "Tooting Bec", "Balham",
+        "Clapham South", "Clapham Common", "Clapham North",
+        "Stockwell", "Oval", "Kennington",
+
+        "Elephant & Castle", "Borough", "London Bridge",
+        "Bank", "Moorgate", "Old Street", "Angel",
+        "King's Cross", "Euston", "Camden Town",
+
+        "|<Chalk Farm", "Belsize Park", "Hampstead",
+        "Golders Green", "Brent Cross", "Hendon Central",
+        "Colindale", "Burnt Oak", "||Edgware",
+
+        "Kentish Town", "Tufnell Park", "Archway",
+        "Highgate", "East Finchley", "Finchley Central",
+
+        "||<Mill Hill East",
+
+        "West Finchley", "Woodside Park",
+        "Totteridge & Whetstone", "High Barnet"
+    ],
+
+    "Northern Via Charing X": [
+        "Morden", "South Wimbledon", "Colliers Wood",
+        "Tooting Broadway", "Tooting Bec", "Balham",
+        "Clapham South", "Clapham Common", "Clapham North",
+        "Stockwell", "Oval",
+
+        "|>Battersea Power Station", "||Nine Elms",
+
+        "Kennington", "Waterloo", "Embankment", "Charing Cross",
+        "Leicester Square", "Tottenham Court Road",
+        "Goodge Street", "Warren Street", "Euston",
+        "Mornington Crescent", "Camden Town",
+
+        "|<Chalk Farm", "Belsize Park", "Hampstead",
+        "Golders Green", "Brent Cross", "Hendon Central",
+        "Colindale", "Burnt Oak", "||Edgware",
+
+        "Kentish Town", "Tufnell Park", "Archway",
+        "Highgate", "East Finchley", "Finchley Central",
+
+        "||<Mill Hill East",
+
+        "West Finchley", "Woodside Park",
+        "Totteridge & Whetstone", "High Barnet"
+    ],
+
+    "Jubilee": [
+        "Stanmore", "Canons Park", "Queensbury", "Kingsbury",
+        "Wembley Park", "Neasden", "Dollis Hill",
+        "Willesden Green", "Kilburn", "West Hampstead",
+        "Finchley Road", "Swiss Cottage", "St John's Wood",
+        "Baker Street", "Bond Street", "Green Park",
+        "Westminster", "Waterloo", "Southwark",
+        "London Bridge", "Bermondsey", "Canada Water",
+        "Canary Wharf", "North Greenwich", "Canning Town",
+        "West Ham", "Stratford"
+    ],
+
     "Walkway0": [
         "Bank", "Monument"
     ],
@@ -142,5 +215,17 @@
 
     "Walkway7": [
         "Northwick Park", "Kenton"
+    ],
+
+    "Walkway8": [
+        "Clapham North", "Clapham High Street"
+    ],
+
+    "Walkway9": [
+        "Archway", "Upper Holloway"
+    ],
+
+    "Walkway10": [
+        "Swiss Cottage", "South Hampstead"
     ]
 }
