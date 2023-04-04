@@ -180,8 +180,9 @@ def stations_between(startindex, endindex, line):
 
 # get a single list of all stations reachable in a single train
 # clean strips the |<> symbols
-def all_one_train_stations(onetrain, clean=True):
-    all_stations_lists = [line['all_stations'] for line in onetrain]
+# specify line to get a specific route
+def all_one_train_stations(onetrain, clean=True, line = ''):
+    all_stations_lists = [check['all_stations'] for check in onetrain if ((check['line'] == line) or (line == ''))]
     all_stations = []
     [all_stations.extend(stats) for stats in all_stations_lists]
     all_stations = [station.strip('|').strip('<').strip('>') for station in all_stations[:]]
@@ -189,8 +190,9 @@ def all_one_train_stations(onetrain, clean=True):
 
 # check if a given station is in the result of a onetrain() call
 # returns True or False
-def is_station_on_one_train(onetrain, dest_names, clean=True):
-    stations = all_one_train_stations(onetrain, clean=clean)
+# specify line to check a specific route
+def is_station_on_one_train(onetrain, dest_names, clean=True, line = ''):
+    stations = all_one_train_stations(onetrain, clean=clean, line=line)
     return any([name in stations for name in dest_names])
     
 
@@ -308,7 +310,7 @@ def termini_to_get_to(possible, start_names, end_onetrain, line):
 
 # find a path that takes two trains to get there
 # output is list of [line, stations, towards, changeat, line2, stations2, towards2]
-def two_train_path(start_onetrain, end_names):
+def two_train_path(start_onetrain, start_names, end_onetrain, end_names):
     matches = []
 
     # go through every station on every line ONCE EACH
@@ -334,15 +336,38 @@ def two_train_path(start_onetrain, end_names):
                         for leg2 in leg2_path:
                             leg1_line = leg1[0]
                             leg1_distance = leg1[1]
-                            #leg1_termini = 
-                            matches.append(leg1)
+                            leg1_termini = termini_to_get_to(find_termini(start_onetrain, leg1_line), start_names, mid_onetrain, leg1_line)
+                            
+                            changeat = [name for name in mid_names if is_station_on_one_train(start_onetrain, [name], line = leg1_line)][0]
+                            
+                            leg2_line = leg2[0]
+                            leg2_distance = leg2[1]
+                            leg2_termini = termini_to_get_to(find_termini(mid_onetrain, leg2_line), mid_names, end_onetrain, leg2_line)
+
+                            route = [leg1_line, leg1_distance, leg1_termini, changeat, leg2_line, leg2_distance, leg2_termini]
+                            if route not in matches:
+                                matches.append(route)
 
     return matches
 
 
+# get the length of the longest string in a list
+def longest(l):
+    longest_str = 0
+    for val in l:
+        if len(str(val)) > longest_str:
+            longest_str = len(str(val))
+    return longest_str
 
+# return a cleaned string of the list
+def cleanlist(l):
+    return str(l).replace('"', "'").replace('[\'', '').replace('\']', '').replace('\', \'', ' or ')
 
-
+# returns a string with a given character added to become a certain length
+def pad_string(string, length, char = ' '):
+    space_r = ((length - len(string)) // 2) * char
+    space_l = ((((length - len(string)) // 2) + ((length - len(string)) % 2))) * char
+    return f'{space_l}{string}{space_r}'
 
 # work out stuff
 startlines, startindex, startnames = find_station(start)
@@ -363,7 +388,7 @@ if one_train_routes != []:
     longest_str = 0
     for route in one_train_routes:
         termini = termini_to_get_to(find_termini(start_onetrain, route[0]), startnames, end_onetrain, route[0])
-        str_termini = str(termini).replace('[\'', '').replace('\']', '').replace('\', \'', ' or ')
+        str_termini = cleanlist(termini)
         if len(str_termini) > longest_str:
             longest_str = len(str_termini)
 
@@ -379,7 +404,7 @@ if one_train_routes != []:
         distance = str(abs(route[1]))
         #print(find_termini(start_onetrain, line))
         termini = termini_to_get_to(find_termini(start_onetrain, line), startnames, end_onetrain, line)
-        str_termini = str(termini).replace('[\'', '').replace('\']', '').replace('\', \'', ' or ')
+        str_termini = cleanlist(termini)
 
         space_line_r = ((22 - len(line)) // 2) * ' '
         space_line_l = ((((22 - len(line)) // 2) + ((20 - len(line)) % 2))) * ' '
@@ -396,5 +421,13 @@ if one_train_routes != []:
 
 else:
     # two train logic
-    two_trains = two_train_path(start_onetrain, endnames)
-    print(two_trains)
+    two_trains = two_train_path(start_onetrain, startnames, end_onetrain, endnames)
+    
+    # get the longest of each string for table length
+    longest_leg1_line = longest([val[0] for val in two_trains])
+    longest_leg1_termini = longest([cleanlist(val[2]) for val in two_trains])
+    longest_changeat = longest([val[3] for val in two_trains])
+    longest_leg2_line = longest([val[4] for val in two_trains])
+    longest_leg2_termini = longest([cleanlist(val[6]) for val in two_trains])
+
+    
