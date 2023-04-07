@@ -185,6 +185,53 @@
         "West Ham", "Stratford"
     ],
 
+    "Victoria": [
+        "Walthamstow Central", "Blackhorse Road", "Tottenham Hale",
+        "Seven Sisters", "Finsbury Park", "Highbury & Islington",
+        "King's Cross", "Euston", "Warren Street", "Oxford Circus",
+        "Green Park", "Victoria", "Pimlico", "Vauxhall",
+        "Stockwell", "Brixton"
+    ],
+
+    "Elizabeth": [
+        "Heathrow Terminal 4",
+        "||>Heathrow Terminal 5",
+        "Heathrow Terminals 2 & 3",
+
+        "|>Reading", "Twyford", "Maidenhead", "Taplow", "Burnham",
+        "Slough", "Langley", "Iver", "||West Drayton",
+
+        "Hayes & Harlington", "Southall", "Hanwell", "West Ealing",
+        "Ealing Broadway", "Acton Main Line", "Paddington",
+        "Bond Street", "Tottenham Court Road", "Farringdon",
+        "Liverpool Street", "Whitechapel",
+
+        "|<Stratford", "Maryland", "Forest Gate", "Manor Park",
+        "Ilford", "Seven Kings", "Goodmayes", "Chadwell Heath",
+        "Romford", "Gidea Park", "Harold Wood", "Brentwood", "||Shenfield",
+
+        "Canary Wharf", "Custom House", "Woolwich", "Abbey Wood"
+    ],
+
+    "Piccadilly": [
+        "Heathrow Terminal 5",
+        "||>Heathrow Terminal 4",
+        "Heathrow Terminals 2 & 3", "Hatton Cross", "Hounslow West",
+        "Hounslow Central", "Hounslow East", "Osterley", "Boston Manor",
+        "Northfields", "South Ealing",
+
+        "|>Uxbridge", "Hillingdon", "Ickenham", "Ruislip", "Ruislip Manor",
+        "Eastcote", "Rayners Lane", "South Harrow", "Sudbury Hill",
+        "Sudbury Town", "Alperton", "Park Royal", "North Ealing", "||Ealing Common",
+
+        "Acton Town", "Turnham Green", "Hammersmith", "Barons Court", "Earl's Court",
+        "Gloucester Road", "South Kensington", "Knightsbridge", "Hyde Park Corner",
+        "Green Park", "Piccadilly Circus", "Leicester Square", "Covent Garden",
+        "Holborn", "Russel Square", "King's Cross", "Caledonian Road", "Holloway Road",
+        "Arsenal", "Finsbury Park", "Manor House", "Turnpike Lane", "Wood Green",
+        "Bounds Green", "Arnos Grove", "Southgate", "Oakwood", "Cockfosters"
+    ],
+
     "Overground - 1": [
         "Romford", "Emerson Park", "Upminster"
     ],
@@ -235,5 +282,29 @@
 
     "Walkway11": [
         "Camden Town", "Camden Road"
+    ],
+
+    "Walkway12": [
+        "Seven Sisters", "South Tottenham"
+    ],
+
+    "Walkway13": [
+        "Wanstead Park", "Forest Gate"
+    ],
+
+    "Walkway14": [
+        "Canary Wharf", "West India Quay"
+    ],
+
+    "Walkway15": [
+        "Woolwich", "Woolwich Arsenal"
+    ],
+
+    "Walkway16": [
+        "Caledonian Road", "Caledonian Road & Barnsbury"
+    ],
+
+    "Walkway17": [
+        "Manor House", "Harringay Green Lanes"
     ]
 }

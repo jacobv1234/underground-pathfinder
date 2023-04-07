@@ -96,7 +96,8 @@ def onetrain(on_lines,indexes):
                 while not offbranch:
                     if '||' in line[j]:
                         offbranch = True
-                    j += 1
+                    else:
+                        j += 1
             j += 1
             
         back = []
@@ -322,6 +323,7 @@ def two_train_path(start_onetrain, start_names, end_onetrain, end_names):
 
                 # get information about that station
                 mid_lines, mid_index, mid_names = find_station(clean(station))
+                print(mid_names)
                 mid_onetrain = onetrain(mid_lines, mid_index)
 
                 # if from that station you can get to the destination
@@ -351,6 +353,51 @@ def two_train_path(start_onetrain, start_names, end_onetrain, end_names):
     return matches
 
 
+# find a path that takes 3 trains - this is the maximum possible
+# [line1, stations1, termini1, change1,
+#  line2, stations2, termini2, change2,
+#  line3, stations3, termini3, total_stations]
+def three_train_path(start_onetrain, start_names, end_onetrain, end_names):
+    matches = []
+
+    # go through every station on every line ONCE EACH
+    checked_stations = []
+    for line in start_onetrain:
+        for station in line['all_stations']:
+            if clean(station) not in checked_stations:
+                checked_stations.append(clean(station))
+
+                # get information about that station
+                mid_lines, mid_index, mid_names = find_station(clean(station))
+                print(mid_names)
+                mid_onetrain = onetrain(mid_lines, mid_index)
+
+                # if from that station you can get to the destination
+                leg2_path = two_train_path(mid_onetrain, mid_names, end_onetrain, end_names)
+                if leg2_path != []:
+                    # celebrate as a match has been found
+                    # find the possible routes for each leg (this version already has leg2/3)
+                    leg1_path = get_to_station_one_train(start_onetrain, mid_names)
+
+                    # piece together each possible combination of leg1 and leg2
+                    for leg1 in leg1_path:
+                        for leg2 in leg2_path:
+                            leg1_line = leg1[0]
+                            leg1_distance = leg1[1]
+                            leg1_termini = termini_to_get_to(find_termini(start_onetrain, leg1_line), start_names, mid_onetrain, leg1_line)
+                            
+                            changeat = [name for name in mid_names if is_station_on_one_train(start_onetrain, [name], line = leg1_line)][0]
+
+                            route = [leg1_line, leg1_distance, leg1_termini, changeat]
+                            route.extend(leg2)
+                            if route not in matches:
+                                matches.append(route)
+
+    return matches
+
+
+
+
 # get the length of the longest string in a list
 # if none are longer than s just return s
 def longest(l, s):
@@ -373,10 +420,12 @@ def pad_string(string, length, char = ' '):
 # work out stuff
 startlines, startindex, startnames = find_station(start)
 start_onetrain = onetrain(startlines,startindex)
+print(start_onetrain)
 #print(f'{startnames} is on these lines: {startlines} in these places: {startindex}')
 
 endlines, endindex, endnames = find_station(end)
 end_onetrain = onetrain(endlines,endindex)
+print(end_onetrain)
 #print(f'{endnames} is on these lines: {endlines} in these places: {endindex}')
 
 one_train_routes = get_to_station_one_train(start_onetrain, endnames)
@@ -424,30 +473,75 @@ else:
     # two train logic
     two_trains = two_train_path(start_onetrain, startnames, end_onetrain, endnames)
     
-    # get the longest of each string for table length
-    longest_leg1_line = longest([val[0] for val in two_trains], 4)
-    longest_leg1_termini = longest([cleanlist(val[2]) for val in two_trains], 7)
-    longest_changeat = longest([val[3] for val in two_trains], 9)
-    longest_leg2_line = longest([val[4] for val in two_trains], 4)
-    longest_leg2_termini = longest([cleanlist(val[6]) for val in two_trains], 7)
+    if two_trains != []:
+        # get the longest of each string for table length
+        longest_leg1_line = longest([val[0] for val in two_trains], 4)
+        longest_leg1_termini = longest([cleanlist(val[2]) for val in two_trains], 7)
+        longest_changeat = longest([val[3] for val in two_trains], 9)
+        longest_leg2_line = longest([val[4] for val in two_trains], 4)
+        longest_leg2_termini = longest([cleanlist(val[6]) for val in two_trains], 7)
 
-    top_line_length = longest_leg1_line + longest_leg1_termini + longest_changeat + longest_leg2_line + longest_leg2_termini + 53
+        top_line_length = longest_leg1_line + longest_leg1_termini + longest_changeat + longest_leg2_line + longest_leg2_termini + 53
 
-    print(' ' + ('_' * top_line_length))
-    print('|_'+pad_string('Line', longest_leg1_line, '_')+'_|_Stations_|_'+pad_string('Towards', longest_leg1_termini, '_')\
-          +'_|_'+pad_string('Change_At', longest_changeat, '_')+'_|_'+pad_string('Line', longest_leg2_line, '_')+'_|_Stations_|_'\
-            +pad_string('Towards', longest_leg2_termini, '_')+'_|_Total_Stations_|')
-    
-    for route in two_trains:
-        line1 = pad_string(route[0], longest_leg1_line)
-        stations1 = pad_string(str(abs(route[1])), 8)
-        termini1 = pad_string(cleanlist(route[2]), longest_leg1_termini)
-        change = pad_string(route[3], longest_changeat)
-        line2 = pad_string(route[4], longest_leg2_line)
-        stations2 = pad_string(str(abs(route[5])), 8)
-        termini2 = pad_string(cleanlist(route[6]), longest_leg2_termini)
-        total_stations = pad_string(str(abs(route[1]) + abs(route[5])), 14)
+        print(' ' + ('_' * top_line_length))
+        print('|_'+pad_string('Line', longest_leg1_line, '_')+'_|_Stations_|_'+pad_string('Towards', longest_leg1_termini, '_')\
+            +'_|_'+pad_string('Change_At', longest_changeat, '_')+'_|_'+pad_string('Line', longest_leg2_line, '_')+'_|_Stations_|_'\
+                +pad_string('Towards', longest_leg2_termini, '_')+'_|_Total_Stations_|')
+        
+        for route in two_trains:
+            line1 = pad_string(route[0], longest_leg1_line)
+            stations1 = pad_string(str(abs(route[1])), 8)
+            termini1 = pad_string(cleanlist(route[2]), longest_leg1_termini)
+            change = pad_string(route[3], longest_changeat)
+            line2 = pad_string(route[4], longest_leg2_line)
+            stations2 = pad_string(str(abs(route[5])), 8)
+            termini2 = pad_string(cleanlist(route[6]), longest_leg2_termini)
+            total_stations = pad_string(str(abs(route[1]) + abs(route[5])), 14)
 
-        print(f'| {line1} | {stations1} | {termini1} | {change} | {line2} | {stations2} | {termini2} | {total_stations} |')
+            print(f'| {line1} | {stations1} | {termini1} | {change} | {line2} | {stations2} | {termini2} | {total_stations} |')
 
-    print(' ' + ('‾' * top_line_length))
+        print(' ' + ('‾' * top_line_length))
+
+    else:
+        # try 3 trains
+        three_trains = three_train_path(start_onetrain, startnames, end_onetrain, endnames)
+
+        if three_trains == []:
+            print('Impossible in three trains or less')
+        
+        else:
+            print()
+            print(len(three_trains), 'matches found.') 
+            for i in range(len(three_trains)):
+                print('______________________________________________')
+                print('Option', str(i+1) + ':')
+                route = three_trains[i]
+                
+                line1 = route[0]
+                stations1 = str(abs(route[1]))
+                termini1 = cleanlist(route[2])
+                change1 = route[3]
+                line2 = route[4]
+                stations2 = str(abs(route[5]))
+                termini2 = cleanlist(route[6])
+                change2 = route[7]
+                line3 = route[8]
+                stations3 = str(abs(route[9]))
+                termini3 = cleanlist(route[10])
+                total_stations = str(int(stations1) + int(stations2) + int(stations3))
+
+                print(f'''Start on line: {line1}
+Go for stations: {stations1}
+Towards: {termini1}
+Get off at: {change1}
+Change onto line: {line2}
+Go for stations: {stations2}
+Towards: {termini2}
+Get off at: {change2}
+Change onto line: {line3}
+Go for stations: {stations3}
+Towards: {termini3}
+Total stations {total_stations}
+‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾''')
+                if i == len(three_trains) - 1:
+                    input('Press Enter for the next one')
